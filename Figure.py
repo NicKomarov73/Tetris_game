@@ -1,0 +1,4 @@
+class Figure():
+    fig = [
+        []
+    ]
