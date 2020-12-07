@@ -1,4 +1,2 @@
 class Figure():
-    fig = [
-        []
-    ]
+    fig = []
