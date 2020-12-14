@@ -3,7 +3,6 @@ import Tetris
 
 # creating colors
 black = (0, 0, 0)
-green = (0, 255, 0)
 gray = (40, 40, 40)
 
 # creating game window
@@ -16,7 +15,7 @@ screen = pg.display.set_mode(SIZE)
 pg.display.set_caption("Tetris")
 clock = pg.time.Clock()
 
-speed_counter, speed, speed_limit, super_speed_counter = 0, 400, 2000, 0
+speed_counter, speed, speed_limit, super_speed_counter = 0, 500, 2000, 0
 
 run = True
 while run:
@@ -49,7 +48,8 @@ while run:
     for i in range(4):
         fig_rec.x = (fig.x + fig_im[i] % 4) * game.tile
         fig_rec.y = (fig.y + fig_im[i] // 4) * game.tile
-        pg.draw.rect(screen, green, fig_rec)
+        pg.draw.rect(screen, fig.color, fig_rec)
+        pg.draw.rect(screen, black, fig_rec, 1)
 
     # move down
     speed_counter += speed
@@ -63,8 +63,18 @@ while run:
         game.move_down()
 
         for i in range(4):
-            if fig.y + fig_im[i] // 4 > game.height - 1:
+            if fig.y + fig_im[i] // 4 > game.height - 2 or game.field[fig.y + fig_im[i] // 4 + 1][fig.x + fig_im[i] % 4] != 0:
+                for j in range(4):
+                    game.field[fig.y + fig_im[j] // 4][fig.x + fig_im[j] % 4] = fig.color
                 game.new_figure()
+
+    for y, raw in enumerate(game.field):
+        for x, col in enumerate(raw):
+            if col != 0:
+                fig_rec.x = x * game.tile
+                fig_rec.y = y * game.tile
+                pg.draw.rect(screen, col, fig_rec)
+                pg.draw.rect(screen, black, fig_rec, 1)
 
     pg.display.flip()
     clock.tick(FPS)

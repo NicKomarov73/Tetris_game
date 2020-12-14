@@ -12,11 +12,22 @@ class Figure():
         [[6, 7, 9, 10], [1, 5, 6, 10]],
     ]
 
+    colors = [
+        '#1F2AFF',
+        '#21FF2F',
+        '#1EFCFF',
+        '#A551FF',
+        '#FFFC3F',
+        '#FF7B26',
+        '#FF4758'
+    ]
+
     def __init__(self, x, y):
         self.x = x
         self.y = y
         self.type = random.randint(0, len(self.fig) - 1)
         self.rotation = 0
+        self.color = self.colors[random.randint(0, len(self.colors) - 1)]
 
     def image(self):
         return self.fig[self.type][self.rotation]
