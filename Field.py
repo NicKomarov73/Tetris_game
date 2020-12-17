@@ -1,7 +1,7 @@
 import Figure
 
 
-class Tetris():
+class Field():
     figure = None
 
     def __init__(self, height, width, tile):
@@ -19,6 +19,8 @@ class Tetris():
         for i in range(4):
             pos_x = self.figure.x + fig_im[i] % 4
             if pos_x < 0 or pos_x > self.width - 1:
+                intersection = True
+            if self.field[self.figure.y + fig_im[i] // 4][self.figure.x + fig_im[i] % 4] != 0:
                 intersection = True
 
         return intersection

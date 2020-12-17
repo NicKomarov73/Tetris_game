@@ -1,12 +1,12 @@
 import pygame as pg
-import Tetris
+import Field
 
 # creating colors
 black = (0, 0, 0)
 gray = (40, 40, 40)
 
 # creating game window
-game = Tetris.Tetris(20, 10, 45)
+game = Field.Field(20, 10, 45)
 SIZE = (game.width * game.tile, game.height * game.tile)
 FPS = 60
 
@@ -15,7 +15,7 @@ screen = pg.display.set_mode(SIZE)
 pg.display.set_caption("Tetris")
 clock = pg.time.Clock()
 
-speed_counter, speed, speed_limit, super_speed_counter = 0, 500, 2000, 0
+speed_counter, speed, speed_limit, super_speed_counter = 0, 100, 2000, 0
 
 run = True
 while run:
