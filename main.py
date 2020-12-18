@@ -9,16 +9,29 @@ gray = (40, 40, 40)
 game = Field.Field(20, 10, 45)
 SIZE = (game.width * game.tile, game.height * game.tile)
 FPS = 60
+GAME_SIZE = (750, 900)
 
 pg.init()
-screen = pg.display.set_mode(SIZE)
+game_screen = pg.display.set_mode(GAME_SIZE)
 pg.display.set_caption("Tetris")
+screen = pg.Surface(SIZE)
 clock = pg.time.Clock()
 
 speed_counter, speed, speed_limit, super_speed_counter = 0, 100, 2000, 0
+game_pause = False
+score_points = {
+            0: 0,
+            1: 100,
+            2: 200,
+            3: 400,
+            4: 800
+}
+score = 0
 
 run = True
 while run:
+    game_screen.blit(screen, (0, 0))
+
     if game.figure == None:
         game.new_figure()
 
@@ -34,8 +47,33 @@ while run:
                 game.rotate()
             if event.key == pg.K_DOWN:
                 speed_limit = 100
+            if event.key == pg.K_SPACE:
+                if not game_pause:
+                    speed = 0
+                    game_pause = True
+                else:
+                    speed = 100
+                    game_pause = False
 
     screen.fill(black)
+
+    # break lines
+    line = game.height - 1
+    del_lines = 0
+    for row in range(game.height - 1, -1, -1):
+        counter = 0
+        for i in range(game.width):
+            if game.field[row][i] != 0:
+                counter += 1
+            game.field[line][i] = game.field[row][i]
+        if counter < game.width:
+            line -= 1
+        else:
+            del_lines += 1
+            speed += 3
+
+    # calc score
+    score += score_points[del_lines]
 
     # draw field
     grid = [pg.Rect(x * game.tile, y * game.tile, game.tile, game.tile) for x in range(game.width) for y in range(game.height)]
@@ -68,6 +106,7 @@ while run:
                     game.field[fig.y + fig_im[j] // 4][fig.x + fig_im[j] % 4] = fig.color
                 game.new_figure()
 
+    # draw field
     for y, raw in enumerate(game.field):
         for x, col in enumerate(raw):
             if col != 0:
