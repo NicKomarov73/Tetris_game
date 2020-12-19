@@ -1,0 +1,2 @@
+SPACE = PAUSE
+TAB = start again
