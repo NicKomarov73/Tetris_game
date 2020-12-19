@@ -64,8 +64,9 @@ while run:
             if event.key == pg.K_DOWN:
                 speed_limit = 100
             if event.key == pg.K_TAB:
-                game.field = [[0 for i in range(game.width + 1)] for j in range(game.height + 1)]
-                game_start = True
+                if not game_start:
+                    game.field = [[0 for i in range(game.width + 1)] for j in range(game.height + 1)]
+                    game_start = True
             if event.key == pg.K_SPACE:
                 if not game_pause:
                     speed = 0
