@@ -1,6 +1,5 @@
 import pygame as pg
 import Field
-import sys
 
 # creating colors
 black = (0, 0, 0)
@@ -17,6 +16,7 @@ pg.font.init()
 game_screen = pg.display.set_mode(GAME_SIZE)
 pg.display.set_caption("Tetris")
 screen = pg.Surface(SIZE)
+bg = pg.Surface((300, 900))
 clock = pg.time.Clock()
 
 speed_counter, speed, speed_limit, super_speed_counter = 0, 100, 2000, 0
@@ -30,12 +30,25 @@ score_points = {
 }
 score = 0
 
-font = pg.font.SysFont("Castellar", 54)
-game_over_text = font.render("GAME OVER!!!", True, 'white')
+font1 = pg.font.SysFont("Castellar", 54)
+font2 = pg.font.SysFont("Castellar", 36)
+game_over_text = font1.render("GAME OVER!!!", True, 'white')
+score_text = font2.render("SCORE: ", True, 'white')
+record_text = font2.render("RECORD: ", True, 'white')
+
+def get_record():
+    with open('Record.txt') as f:
+        return f.readline()
+
+def set_record(record, score):
+    rec = max(int(record), int(score))
+    with open('Record.txt', 'w') as f:
+        f.write(str(rec))
 
 run = True
 while run:
     game_screen.blit(screen, (0, 0))
+    game_screen.blit(bg, (450, 0))
     screen.fill(black)
 
     for event in pg.event.get():
@@ -61,6 +74,8 @@ while run:
                     speed = 100
                     game_pause = False
 
+    record = get_record()
+
     if game.figure == None and game_start:
         game.new_figure()
 
@@ -85,6 +100,12 @@ while run:
     # draw field
     grid = [pg.Rect(x * game.tile, y * game.tile, game.tile, game.tile) for x in range(game.width) for y in range(game.height)]
     [pg.draw.rect(screen, gray, i, 1) for i in grid]
+
+    # draw text
+    game_screen.blit(score_text, (480, 500))
+    game_screen.blit(record_text, (480, 300))
+    game_screen.blit(font2.render(str(score), True, 'white'), (530, 580))
+    game_screen.blit(font2.render(str(record), True, 'white'), (530, 380))
 
     # draw figure
     if game_start:
@@ -127,6 +148,7 @@ while run:
     # end game
     for i in range(game.width):
         if game.field[0][i] != 0:
+            set_record(record, score)
             game.figure = None
             game_start = False
             game_screen.blit(game_over_text, (30, (game.height / 2) * game.tile))
