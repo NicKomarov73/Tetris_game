@@ -11,7 +11,7 @@ class Field():
         self.field = [[0 for i in range(self.width+1)] for j in range(self.height+1)]
 
     def new_figure(self):
-        self.figure = Figure.Figure(3, -1)
+        self.figure = Figure.Figure(3, -2)
 
     def intersect(self):
         intersection = False
